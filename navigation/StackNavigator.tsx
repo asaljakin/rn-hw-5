@@ -1,4 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 import BottomTabNavigator from "./BottomTabNavigation";
 
@@ -7,26 +8,17 @@ import RegistrationScreen from "../screens/RegistrationScreen";
 import CommentsScreen from "../screens/CommentsScreen";
 import MapScreen from "../screens/MapScreen";
 
-import { styles } from "../styles/css";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Feather } from "@expo/vector-icons";
 import { colors } from "../styles/global";
+import { styles } from "../styles/css";
+import { Feather } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
+import { selectIsAuth } from "../src/redux/user/userSelectors";
 
 const Stack = createStackNavigator();
 
-export type StackParamList = {
-  Home: undefined; // Якщо екран не приймає параметрів
-  Login: undefined;
-  Registration: { userEmail: string };
-  CreatePost: undefined; // Якщо екран приймає параметри
-  Posts: undefined;
-  Map: { coords: object };
-  Comments: { post: object };
-  Profile: { user: object };
-};
-
 const StackNavigator = () => {
-  const isLoggedIn = true;
+  const auth = useSelector(selectIsAuth);
+
   return (
     <Stack.Navigator
       initialRouteName="Login"
@@ -34,7 +26,7 @@ const StackNavigator = () => {
         headerShown: false,
       }}
     >
-      {isLoggedIn ? (
+      {auth ? (
         <>
           <Stack.Screen
             name="Home"

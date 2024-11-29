@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { NativeStackScreenProps } from "react-native-screens/lib/typescript/native-stack/types";
-import { StackParamList } from "../navigation/StackNavigator";
+import { StackParamList } from "../src/types";
 
 import {
   Image,
@@ -19,14 +19,19 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import AddIcon from "../icons/AddIcon";
 
+import { useDispatch } from "react-redux";
+import { signUp } from "../src/redux/user/userOperations";
+
 type HomeScreenProps = NativeStackScreenProps<StackParamList, "Registration">;
 
 const RegistrationScreen: FC<HomeScreenProps> = ({ navigation, route }) => {
-  const [login, setLogin] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
   const [keyboardStatus, setKeyboardStatus] = useState(false);
+
+  const dispatch = useDispatch();
 
   const keyboardHide = () => {
     setKeyboardStatus(false);
@@ -38,7 +43,7 @@ const RegistrationScreen: FC<HomeScreenProps> = ({ navigation, route }) => {
   };
 
   const handleLoginChange = (value: string) => {
-    setLogin(value);
+    setDisplayName(value);
   };
 
   const handleEmailChange = (value: string) => {
@@ -54,7 +59,10 @@ const RegistrationScreen: FC<HomeScreenProps> = ({ navigation, route }) => {
   };
 
   const onRegister = () => {
-    navigation.navigate("Home");
+    console.log("onRegister :>> ", displayName, email, password);
+
+    dispatch(signUp({ displayName, email, password }));
+    navigation.navigate("Login");
   };
 
   const onLogin = () => {
@@ -94,7 +102,7 @@ const RegistrationScreen: FC<HomeScreenProps> = ({ navigation, route }) => {
 
             <View style={[styles.innerContainer, styles.inputContainer]}>
               <Input
-                value={login}
+                value={displayName}
                 placeholder="Логін"
                 onTextChange={handleLoginChange}
                 onFocusStatus={handleInputFocus}

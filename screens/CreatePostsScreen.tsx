@@ -3,7 +3,7 @@ import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 
-import { StackParamList } from "../navigation/StackNavigator";
+import { StackParamList } from "../src/types";
 import { NativeStackScreenProps } from "react-native-screens/lib/typescript/native-stack/types";
 
 import {
@@ -24,15 +24,26 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { styles } from "../styles/css";
 import { colors } from "../styles/global";
+
 import { useNavigation } from "@react-navigation/native";
+
+import { db, storage } from "../src/firebase/config";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { addDoc, collection } from "firebase/firestore";
+
+import { useSelector } from "react-redux";
+import { selectUser } from "../src/redux/user/userSelectors";
 
 type HomeScreenProps = NativeStackScreenProps<StackParamList, "CreatePost">;
 
 const CreatePostsScreen: FC<HomeScreenProps> = ({}) => {
+  const user = useSelector(selectUser);
   const [isShownKeyboard, setIsShownKeyboard] = useState(false);
   const [photo, setPhoto] = useState(null);
   const [title, setTitle] = useState("");
   const [place, setPlace] = useState("");
+  const [location, setLocation] = useState(null);
+  const [error, setError] = useState("");
 
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
@@ -76,6 +87,9 @@ const CreatePostsScreen: FC<HomeScreenProps> = ({}) => {
   const takePicture = async () => {
     if (!camera) return;
 
+    const location = await Location.getCurrentPositionAsync({});
+    setLocation(location);
+
     const { uri } = await camera?.current?.takePictureAsync();
     await MediaLibrary.saveToLibraryAsync(uri);
     setPhoto(uri);
@@ -83,14 +97,36 @@ const CreatePostsScreen: FC<HomeScreenProps> = ({}) => {
 
   const isAllowed = !!photo && !!title && !!place;
 
-  const onSubmit = async () => {
-    const location = await Location.getCurrentPositionAsync({});
-    const coords = {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    };
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(photo);
+    const file = await response.blob();
+    const photoId = "ph_" + Math.random() * 1000;
+    const imagesRef = ref(storage, `postImages/${photoId}`);
 
-    navigation.navigate("Posts", { photo, title, place, coords });
+    await uploadBytesResumable(imagesRef, file);
+    const url = await getDownloadURL(imagesRef);
+
+    return url;
+  };
+
+  const uploadPostToServer = async () => {
+    const photo = await uploadPhotoToServer();
+    try {
+      await addDoc(collection(db, "posts"), {
+        photo,
+        title,
+        place,
+        location: location.coords,
+        uid: user.id,
+      });
+    } catch (error) {
+      setError("Error uploading post: ", error.message);
+    }
+  };
+
+  const onSubmit = async () => {
+    await uploadPostToServer();
+    navigation.navigate("Posts", { photo, title, place, location });
 
     setTitle("");
     setPhoto(null);

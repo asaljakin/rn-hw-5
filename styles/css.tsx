@@ -5,9 +5,6 @@ const { width: SCREEN_WIDTH } = Dimensions.get("screen");
 export const styles = StyleSheet.create({
   containerForKeyboard: {
     flex: 1,
-    // height: "100%",
-    //alignItems: "center",
-    //justifyContent: "flex-end",
   },
   container: {
     flex: 1,
@@ -37,7 +34,6 @@ export const styles = StyleSheet.create({
   },
   formContainer: {
     width: SCREEN_WIDTH,
-    //height: "60%",
     backgroundColor: colors.white,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
@@ -46,7 +42,6 @@ export const styles = StyleSheet.create({
   },
   formContainerLogin: {
     width: SCREEN_WIDTH,
-    //height: "55%",
     backgroundColor: colors.white,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
@@ -70,7 +65,6 @@ export const styles = StyleSheet.create({
   },
   imageBg: {
     flex: 1,
-    //justifyContent: "flex-end",
   },
   image: {
     position: "absolute",
@@ -152,7 +146,6 @@ export const styles = StyleSheet.create({
     paddingBottom: 34,
     paddingHorizontal: 16,
   },
-
   cameraContainer: {
     position: "relative",
     justifyContent: "center",
@@ -165,7 +158,6 @@ export const styles = StyleSheet.create({
     marginBottom: 8,
     overflow: "hidden",
   },
-
   camera: {
     width: "100%",
     height: "100%",
@@ -175,7 +167,6 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
   takePhotoContainer: {
     position: "absolute",
     top: 10,
@@ -185,7 +176,6 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
   },
-
   photoBtnContainer: {
     position: "absolute",
     justifyContent: "center",
@@ -195,7 +185,6 @@ export const styles = StyleSheet.create({
     height: 60,
     borderRadius: 50,
   },
-
   textUploade: {
     marginBottom: 32,
     fontFamily: "Roboto-Regular",
@@ -203,7 +192,6 @@ export const styles = StyleSheet.create({
     lineHeight: 18.75,
     color: colors.underline_gray,
   },
-
   createPostInput: {
     marginBottom: 32,
     paddingBottom: 15,
@@ -250,16 +238,13 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
     marginHorizontal: "auto",
   },
-  postsContainer: {
+  screensContainer: {
     flex: 1,
     paddingHorizontal: 16,
     paddingTop: 32,
     paddingBottom: 34,
     backgroundColor: colors.white,
   },
-  // postListContainer: {
-  //   gap: 34,
-  // },
   postPhoto: {
     marginBottom: 8,
     width: "100%",
@@ -318,4 +303,81 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 6,
   },
+  sendButton: {
+    justifyContent: "center",
+    alignItems: "center",
+
+    position: "absolute",
+    right: 8,
+    top: 8,
+
+    width: 34,
+    height: 34,
+
+    backgroundColor: colors.orange,
+    borderRadius: 50,
+  },
+  data: (props) => ({
+    fontFamily: "Roboto-Regular",
+    fontSize: 10,
+    color: colors.underline_gray,
+    textAlign: props ? "left" : "right",
+  }),
+  nickname: (props) => ({
+    marginBottom: 8,
+
+    fontFamily: "Roboto-Medium",
+    fontSize: 13,
+    color: colors.black_primary,
+    textAlign: props ? "right" : "left",
+  }),
+  avatar: {
+    width: 28,
+    height: 28,
+
+    borderRadius: 50,
+    objectFit: "cover",
+  },
+  avatarWrapper: (props) => ({
+    marginRight: props ? 0 : 16,
+    marginLeft: props ? 16 : 0,
+    width: 28,
+    height: 28,
+
+    borderRadius: 50,
+    overflow: "hidden",
+    backgroundColor: colors.border_gray,
+  }),
+  textContainer: {
+    flex: 1,
+    padding: 16,
+
+    width: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.03)",
+
+    borderRadius: 6,
+  },
+  textInput: {
+    paddingLeft: 16,
+    paddingRight: 8,
+    height: 50,
+    borderRadius: 100,
+    borderWidth: 1,
+    borderColor: colors.border_gray,
+    backgroundColor: colors.light_gray,
+  },
+  postPhotoInCommentScreen: {
+    marginBottom: 32,
+    width: "100%",
+    height: 240,
+
+    overflow: "hidden",
+    objectFit: "cover",
+
+    borderRadius: 8,
+  },
+  // userContainer: {
+  //   flex: 1,
+  //   width: "100%",
+  // },
 });

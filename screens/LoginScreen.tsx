@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { NativeStackScreenProps } from "react-native-screens/lib/typescript/native-stack/types";
-import { StackParamList } from "../navigation/StackNavigator";
+import { StackParamList } from "../src/types";
 
 import {
   Image,
@@ -18,6 +18,9 @@ import { styles } from "../styles/css";
 import Input from "../components/Input";
 import Button from "../components/Button";
 
+import { useDispatch } from "react-redux";
+import { signIn } from "../src/redux/user/userOperations";
+
 type HomeScreenProps = NativeStackScreenProps<StackParamList, "Login">;
 
 const LoginScreen: FC<HomeScreenProps> = ({ navigation, route }) => {
@@ -25,6 +28,8 @@ const LoginScreen: FC<HomeScreenProps> = ({ navigation, route }) => {
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
   const [keyboardStatus, setKeyboardStatus] = useState(false);
+
+  const dispatch = useDispatch();
 
   const keyboardHide = () => {
     setKeyboardStatus(false);
@@ -46,7 +51,10 @@ const LoginScreen: FC<HomeScreenProps> = ({ navigation, route }) => {
   };
 
   const onLogin = () => {
-    navigation.navigate("Home");
+    dispatch(signIn({ email, password }));
+    setEmail(email);
+    setPassword(password);
+    //navigation.navigate("Home");
   };
 
   const onRegister = () => {

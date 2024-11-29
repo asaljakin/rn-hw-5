@@ -13,12 +13,19 @@ import { styles } from "../styles/css";
 import ProfileScreen from "../screens/ProfileScreen";
 import CreatePostsScreen from "../screens/CreatePostsScreen";
 
+import { useDispatch, useSelector } from "react-redux";
+import { selectIsAuth } from "../src/redux/user/userSelectors";
+import { signOutUser } from "../src/redux/user/userOperations";
+
 const Tab = createBottomTabNavigator(); // вказує на групу навігаторів
 
 const BottomTabNavigator = () => {
+  const dispatch = useDispatch();
+  const auth = useSelector(selectIsAuth);
+
   return (
     <Tab.Navigator
-      initialRouteName="Post"
+      initialRouteName="Posts"
       screenOptions={({ navigation }) => ({
         headerRightContainerStyle: { paddingRight: 16 },
         headerLeftContainerStyle: { paddingLeft: 16 },
@@ -44,9 +51,9 @@ const BottomTabNavigator = () => {
                 name="log-out"
                 size={24}
                 color={colors.underline_gray}
-                onPress={() =>
-                  navigation.navigate("Login", { screen: "Login" })
-                }
+                onPress={() => {
+                  dispatch(signOutUser(auth));
+                }}
               />
             </TouchableOpacity>
           ),
